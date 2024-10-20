@@ -36,7 +36,7 @@ class Activity_Login : AppCompatActivity() {
                     .addOnSuccessListener { documents ->
                         var userFound = false
                         for (item in documents) {
-                            val dbIdPegawai = item.data["idpegawai"].toString() //jangan pake _
+                            val dbIdPegawai = item.data["idpegawai"].toString()
                             val dbPassword = item.data["password"].toString()
 
                             if (dbIdPegawai == idPegawai && dbPassword == password) {
@@ -47,11 +47,9 @@ class Activity_Login : AppCompatActivity() {
                                     // Ambil gajiHarian dari Firestore berdasarkan idPegawai
                                     val gajiHarian = item.data["gajiHarian"].toString().toInt()
 
-                                    // Simpan data absensi
-                                    simpanDataAbsensi(idPegawai, gajiHarian)
+                                    // Cek apakah sudah absen hari ini
+                                    cekAbsensi(idPegawai, gajiHarian)
 
-                                    // Notifikasi absen
-                                    Toast.makeText(this, "$idPegawai telah absen", Toast.LENGTH_SHORT).show()
                                 } else if (role == "admin") {
                                     // Pindah ke ActivityAdmin
                                     Toast.makeText(this, "Berhasil masuk sebagai Admin", Toast.LENGTH_SHORT).show()
@@ -76,10 +74,30 @@ class Activity_Login : AppCompatActivity() {
         }
     }
 
-    private fun simpanDataAbsensi(idPegawai: String, gajiHarian: Int) {
-        // tanggal saat ini dalam format yang diinginkan
+    private fun cekAbsensi(idPegawai: String, gajiHarian: Int) {
+        // tanggal saat absen (tanggal-bulan-tahun)
         val tanggalSekarang = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
 
+        // Query ke Firestore untuk cek apakah sudah absen di hari yang sama
+        db.collection("data_absensi")
+            .whereEqualTo("id_pegawai", idPegawai)
+            .whereEqualTo("tgl_absensi", tanggalSekarang)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty) {
+                    // Belum absen, lanjut simpan absensi
+                    simpanDataAbsensi(idPegawai, gajiHarian, tanggalSekarang)
+                } else {
+                    // Sudah absen, tampilkan pesan
+                    Toast.makeText(this, "Anda sudah absen hari ini.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Gagal mengecek absensi: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun simpanDataAbsensi(idPegawai: String, gajiHarian: Int, tanggalSekarang: String) {
         // Buat objek absensi (ID masih kosong karena akan diisi setelah disimpan)
         val absensi = ClsAbsensi(
             id = "",  // ID belum diisi
