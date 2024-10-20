@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:viewBindingIgnore="true"
+        tools:context=".Activity_Register_Pegawai">
+
+        <EditText
+            android:id="@+id/txt_reg_namapegawai"
+            android:layout_width="330dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="132dp"
+            android:ems="10"
+            android:hint="Nama Pegawai"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.543"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/txt_reg_idpegawai"
+            android:layout_width="330dp"
+            android:layout_height="57dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="ID Pegawai"
+            android:inputType="text"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/txt_reg_notelpon"
+            android:layout_width="330dp"
+            android:layout_height="51dp"
+            android:ems="10"
+            android:hint="No Telpon"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@+id/txt_reg_namapegawai"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/txt_reg_namapegawai"
+            app:layout_constraintTop_toBottomOf="@+id/txt_reg_namapegawai" />
+
+        <EditText
+            android:id="@+id/txt_reg_gajiharian"
+            android:layout_width="327dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:hint="Gaji Harian"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="@+id/txt_reg_notelpon"
+            app:layout_constraintHorizontal_bias="0.333"
+            app:layout_constraintStart_toStartOf="@+id/txt_reg_notelpon"
+            app:layout_constraintTop_toBottomOf="@+id/txt_reg_notelpon" />
+
+        <Button
+            android:id="@+id/btn_reg_save"
+            android:layout_width="294dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="16dp"
+            android:text="Register Pegawai"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
