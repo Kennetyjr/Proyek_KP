@@ -60,7 +60,8 @@ class Activity_Register_Pegawai : AppCompatActivity() {
                     "gajiHarian" to gajiHarian,
                     "role" to role,
                     "password" to password,
-                    "status" to true
+                    "status" to true,
+                    "jumlah_absensi_mingguan" to 0
                 )
 
                 // Save the new employee to Firestore

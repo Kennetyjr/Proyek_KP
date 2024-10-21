@@ -52,6 +52,8 @@ class Activity_Login : AppCompatActivity() {
 
                                 } else if (role == "admin") {
                                     // Pindah ke ActivityAdmin
+                                    var nextIntent = Intent(this, Activity_HomeAdmin::class.java)
+                                    startActivity(nextIntent)
                                     Toast.makeText(this, "Berhasil masuk sebagai Admin", Toast.LENGTH_SHORT).show()
                                 }
                                 break
@@ -75,20 +77,51 @@ class Activity_Login : AppCompatActivity() {
     }
 
     private fun cekAbsensi(idPegawai: String, gajiHarian: Int) {
-        // tanggal saat absen (tanggal-bulan-tahun)
         val tanggalSekarang = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
 
-        // Query ke Firestore untuk cek apakah sudah absen di hari yang sama
+        // Query ke Firestore untuk mendapatkan data pegawai dengan idPegawai
+        db.collection("data_pegawai")
+            .whereEqualTo("idpegawai", idPegawai)
+            .get()
+            .addOnSuccessListener { pegawaiDocuments ->
+                if (!pegawaiDocuments.isEmpty) {
+                    val pegawaiDocument = pegawaiDocuments.documents[0]
+                    val jumlahAbsensiMingguan = pegawaiDocument.getLong("jumlah_absensi_mingguan")?.toInt() ?: 0
+
+                    if (jumlahAbsensiMingguan >= 7) {
+                        // Reset jumlah_absensi_mingguan ke 0 jika sudah 7
+                        db.collection("data_pegawai").document(pegawaiDocument.id)
+                            .update("jumlah_absensi_mingguan", 0)
+                            .addOnSuccessListener {
+                                // Lanjutkan dengan menyimpan absensi
+                                cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang)
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Gagal memperbarui jumlah absensi: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        // Lanjutkan jika jumlah absensi < 7
+                        cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang)
+                    }
+                } else {
+                    Toast.makeText(this, "Pegawai tidak ditemukan", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Gagal mengecek data pegawai: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun cekAbsensiHariIni(idPegawai: String, gajiHarian: Int, tanggalSekarang: String) {
         db.collection("data_absensi")
             .whereEqualTo("id_pegawai", idPegawai)
             .whereEqualTo("tgl_absensi", tanggalSekarang)
             .get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {
-                    // Belum absen, lanjut simpan absensi
+                    // Belum absen hari ini, simpan absensi
                     simpanDataAbsensi(idPegawai, gajiHarian, tanggalSekarang)
                 } else {
-                    // Sudah absen, tampilkan pesan
                     Toast.makeText(this, "Anda sudah absen hari ini.", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -98,24 +131,22 @@ class Activity_Login : AppCompatActivity() {
     }
 
     private fun simpanDataAbsensi(idPegawai: String, gajiHarian: Int, tanggalSekarang: String) {
-        // Buat objek absensi (ID masih kosong karena akan diisi setelah disimpan)
         val absensi = ClsAbsensi(
-            id = "",  // ID belum diisi
+            id = "",
             id_pegawai = idPegawai,
             tgl_absensi = tanggalSekarang,
             gaji_harian = gajiHarian
         )
 
-        // Simpan absensi ke Firestore
         db.collection("data_absensi")
             .add(absensi)
             .addOnSuccessListener { documentReference ->
-                // Update ID dengan ID yang diberikan oleh Firestore
                 val generatedId = documentReference.id
                 db.collection("data_absensi").document(generatedId)
                     .update("id", generatedId)
                     .addOnSuccessListener {
-                        Toast.makeText(this, "Absensi berhasil disimpan dengan ID: $generatedId", Toast.LENGTH_SHORT).show()
+                        // Setelah absensi berhasil disimpan, update jumlah_absensi_mingguan pegawai
+                        updateJumlahAbsensiMingguan(idPegawai)
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(this, "Gagal memperbarui ID absensi: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -125,4 +156,31 @@ class Activity_Login : AppCompatActivity() {
                 Toast.makeText(this, "Gagal menyimpan absensi: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun updateJumlahAbsensiMingguan(idPegawai: String) {
+        // Dapatkan dokumen pegawai
+        db.collection("data_pegawai")
+            .whereEqualTo("idpegawai", idPegawai)
+            .get()
+            .addOnSuccessListener { pegawaiDocuments ->
+                if (!pegawaiDocuments.isEmpty) {
+                    val pegawaiDocument = pegawaiDocuments.documents[0]
+                    val jumlahAbsensiMingguan = pegawaiDocument.getLong("jumlah_absensi_mingguan")?.toInt() ?: 0
+
+                    // Tambah jumlah_absensi_mingguan +1
+                    db.collection("data_pegawai").document(pegawaiDocument.id)
+                        .update("jumlah_absensi_mingguan", jumlahAbsensiMingguan + 1)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Absensi berhasil disimpan dan jumlah absensi mingguan diperbarui.", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Gagal memperbarui jumlah absensi mingguan: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Gagal mengambil data pegawai untuk update absensi mingguan: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 }

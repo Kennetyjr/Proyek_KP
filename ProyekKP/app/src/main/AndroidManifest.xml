@@ -13,6 +13,12 @@
         android:theme="@style/Theme.ProyekKP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_HomeAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Home_Pegawai"
+            android:exported="false" />
+        <activity
             android:name=".TanggalMerahInputActivity"
             android:exported="false" />
         <activity
@@ -20,7 +26,7 @@
             android:exported="false" />
         <activity
             android:name=".Activity_Login"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,8 +35,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -12,12 +12,12 @@
             android:id="@+id/txtloginname"
             android:layout_width="312dp"
             android:layout_height="62dp"
-            android:layout_marginTop="116dp"
+            android:layout_marginTop="60dp"
             android:ems="10"
             android:hint="ID"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.484"
+            app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,24 +35,24 @@
 
         <Button
             android:id="@+id/btnlogin"
-            android:layout_width="301dp"
-            android:layout_height="83dp"
-            android:layout_marginBottom="164dp"
+            android:layout_width="121dp"
+            android:layout_height="47dp"
+            android:layout_marginBottom="428dp"
             android:text="Absen"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txtloginpassword"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/txtloginpassword" />
 
         <Button
             android:id="@+id/btntohomepegawai"
-            android:layout_width="165dp"
-            android:layout_height="78dp"
-            android:layout_marginTop="52dp"
+            android:layout_width="136dp"
+            android:layout_height="57dp"
+            android:layout_marginBottom="428dp"
             android:text="Home Pegawai"
-            app:layout_constraintEnd_toEndOf="@+id/btnlogin"
-            app:layout_constraintHorizontal_bias="0.455"
-            app:layout_constraintStart_toStartOf="@+id/btnlogin"
-            app:layout_constraintTop_toBottomOf="@+id/btnlogin" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
