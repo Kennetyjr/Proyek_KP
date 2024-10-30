@@ -38,7 +38,6 @@ class TanggalMerahInputActivity : AppCompatActivity() {
         txt_pengkali = findViewById(R.id.txt_pengkali)
         txt_jenis = findViewById(R.id.txt_jenis)
         btn_tambah = findViewById(R.id.btn_tambah_tanggal)
-        btn_cektampilan = findViewById(R.id.btn_ke_tampil_tgl)
 
         btn_tambah.setOnClickListener {
             val tanggalmerah = txt_tanggalmerah.text.toString()
@@ -73,13 +72,5 @@ class TanggalMerahInputActivity : AppCompatActivity() {
                 Toast.makeText(this, "Semua field harus diisi", Toast.LENGTH_SHORT).show()
             }
         }
-
-        btn_cektampilan.setOnClickListener {
-//            var nextIntent = Intent(this, Tampilkan_tanggal_merah::class.java)
-//            startActivity(nextIntent)
-        }
-
-
-
     }
 }

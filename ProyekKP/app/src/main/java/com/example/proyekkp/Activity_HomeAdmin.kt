@@ -37,36 +37,75 @@ class Activity_HomeAdmin : AppCompatActivity() {
     }
 
     private fun loadDataPegawai() {
+        // Mengambil data dari koleksi "data_pegawai"
         db.collection("data_pegawai")
+            .whereEqualTo("role", "pegawai")
+            .whereEqualTo("status", true)
             .get()
             .addOnSuccessListener { documents ->
+                listPegawai.clear()
                 for (document in documents) {
-                    val role = document.getString("role") ?: ""
-                    val status = document.getBoolean("status") ?: false
-
-                    if (role == "pegawai" && status) {
-                        val jumlahAbsensiMingguan = document.getLong("jumlah_absensi_mingguan")?.toInt() ?: 0
-
-                        val pegawai = ClsPegawai(
-                            id = document.id,
-                            id_pegawai = document.getString("idpegawai") ?: "",
-                            nama_pegawai = document.getString("namaPegawai") ?: "",
-                            password = document.getString("password") ?: "",
-                            no_telpon = document.getString("noTelpon")?.toInt() ?: 0,
-                            gaji_harian = document.getLong("gajiHarian")?.toInt() ?: 0,
-                            jumlah_absensi_mingguan = jumlahAbsensiMingguan,
-                            role = role,
-                            status = status
-                        )
-                        listPegawai.add(pegawai)
-                    }
+                    val pegawai = ClsPegawai(
+                        id = document.id,
+                        id_pegawai = document.getString("idpegawai") ?: "",
+                        nama_pegawai = document.getString("namaPegawai") ?: "",
+                        password = document.getString("password") ?: "",
+                        no_telpon = document.getString("noTelpon")?.toInt() ?: 0,
+                        gaji_harian = document.getLong("gajiHarian")?.toInt() ?: 0,
+                        jumlah_absensi_mingguan = 0, // Akan diperbarui berdasarkan data absensi
+                        role = "pegawai",
+                        status = true
+                    )
+                    listPegawai.add(pegawai)
                 }
-                adapterListPegawaiGaji.notifyDataSetChanged()
+                // Setelah mengambil data pegawai, lanjutkan mengambil data absensi mingguan
+                loadAbsensiMingguan()
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Gagal mengambil data: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun loadAbsensiMingguan() {
+        // Hitung batas tanggal 7 hari ke belakang
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DAY_OF_YEAR, -7)
+        val satuMingguLalu = Timestamp(cal.time)
+
+        // Ambil data absensi untuk setiap pegawai dari seminggu yang lalu hingga sekarang
+        db.collection("data_absensi")
+            //.whereGreaterThanOrEqualTo("tgl_absensi", satuMingguLalu)
+            .get()
+            .addOnSuccessListener { absensiDocuments ->
+                // Peta untuk melacak jumlah absen setiap pegawai
+                val absensiMap = mutableMapOf<String, Int>()
+
+                for (document in absensiDocuments) {
+                    val idPegawai = document.getString("id_pegawai")
+                    println("idPehgawai ==="+idPegawai);
+                    if (idPegawai != null) {
+                        println("masuk perhitungan: ==");
+                        absensiMap[idPegawai] = absensiMap.getOrDefault(idPegawai, 0) + 1
+                        println(absensiMap[idPegawai]);
+                    }
+                }
+
+                println("Absensi Map "+absensiMap.toString())////////////
+
+                // Perbarui jumlah absensi mingguan pada setiap objek pegawai di `listPegawai`
+                for (pegawai in listPegawai) {
+                    println("Pegawau "+pegawai.id_pegawai)////////////
+                    pegawai.jumlah_absensi_mingguan = absensiMap[pegawai.id_pegawai] ?: 0
+                }
+
+                // Perbarui adapter untuk menampilkan data yang diperbarui
+                adapterListPegawaiGaji.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Gagal mengambil data absensi: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
 
 }

@@ -22,14 +22,16 @@ class AdapterListPegawaiGaji(
         val txtbonus: TextView = rowView.findViewById(R.id.txtbonus)
         val txttotal: TextView = rowView.findViewById(R.id.txttotal)
         val txtinputlembur: EditText = rowView.findViewById(R.id.txtinputlembur)
+        val txtabsensiMingguan: TextView = rowView.findViewById(R.id.txtabsensiMingguan)
 
+        val pegawai = arr[position]
 
-        txtidpegawai.text = arr[position].id_pegawai
-        txtnamapegawai.text = arr[position].nama_pegawai
-        txtgajiharian.text = arr[position].gaji_harian.toString()
+        txtidpegawai.text = pegawai.id_pegawai
+        txtnamapegawai.text = pegawai.nama_pegawai
+        txtgajiharian.text = pegawai.gaji_harian.toString()
+        txtabsensiMingguan.text = "${pegawai.jumlah_absensi_mingguan}/7 hari"
 
-
-        val gajiHarian = arr[position].gaji_harian
+        val gajiHarian = pegawai.gaji_harian
         val bonus = txtinputlembur.text.toString().toIntOrNull() ?: 0
 
         txtbonus.text = bonus.toString()
@@ -37,4 +39,5 @@ class AdapterListPegawaiGaji(
 
         return rowView
     }
+
 }

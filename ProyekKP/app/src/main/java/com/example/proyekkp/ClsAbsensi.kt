@@ -9,5 +9,6 @@ data class ClsAbsensi(
     var id_pegawai : String,
     var tgl_absensi : String,
     var gaji_harian : Int,
+    var tanggal_merah : Boolean,
 ): Parcelable {
 }

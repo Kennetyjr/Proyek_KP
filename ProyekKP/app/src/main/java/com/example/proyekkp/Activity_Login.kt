@@ -25,6 +25,11 @@ class Activity_Login : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         db = Firebase.firestore
 
+        binding.btnkeregister.setOnClickListener {
+            val nextIntent = Intent(this, TanggalMerahInputActivity::class.java)
+            startActivity(nextIntent)
+        }
+
         binding.btnlogin.setOnClickListener {
             val idPegawai = binding.txtloginname.text.toString()
             val password = binding.txtloginpassword.text.toString()
@@ -47,12 +52,12 @@ class Activity_Login : AppCompatActivity() {
                                     // Ambil gajiHarian dari Firestore berdasarkan idPegawai
                                     val gajiHarian = item.data["gajiHarian"].toString().toInt()
 
-                                    // Cek apakah sudah absen hari ini
+                                    // Cek apakah sudah absen hari ini dan lakukan proses absen jika belum
                                     cekAbsensi(idPegawai, gajiHarian)
 
                                 } else if (role == "admin") {
                                     // Pindah ke ActivityAdmin
-                                    var nextIntent = Intent(this, Activity_HomeAdmin::class.java)
+                                    val nextIntent = Intent(this, Activity_HomeAdmin::class.java)
                                     startActivity(nextIntent)
                                     Toast.makeText(this, "Berhasil masuk sebagai Admin", Toast.LENGTH_SHORT).show()
                                 }
@@ -71,13 +76,14 @@ class Activity_Login : AppCompatActivity() {
             }
         }
 
+
         binding.btntohomepegawai.setOnClickListener {
             //ke halaman pegawai
         }
     }
 
     private fun cekAbsensi(idPegawai: String, gajiHarian: Int) {
-        val tanggalSekarang = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
+        val tanggalSekarang = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
         // Query ke Firestore untuk mendapatkan data pegawai dengan idPegawai
         db.collection("data_pegawai")
@@ -89,9 +95,9 @@ class Activity_Login : AppCompatActivity() {
                     val jumlahAbsensiMingguan = pegawaiDocument.getLong("jumlah_absensi_mingguan")?.toInt() ?: 0
 
                     if (jumlahAbsensiMingguan >= 7) {
-                        // Reset jumlah_absensi_mingguan ke 0 jika sudah 7
+                        // Reset jumlah_absensi_mingguan ke 1 jika sudah 7
                         db.collection("data_pegawai").document(pegawaiDocument.id)
-                            .update("jumlah_absensi_mingguan", 0)
+                            .update("jumlah_absensi_mingguan", 1)
                             .addOnSuccessListener {
                                 // Lanjutkan dengan menyimpan absensi
                                 cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang)
@@ -131,31 +137,46 @@ class Activity_Login : AppCompatActivity() {
     }
 
     private fun simpanDataAbsensi(idPegawai: String, gajiHarian: Int, tanggalSekarang: String) {
-        val absensi = ClsAbsensi(
-            id = "",
-            id_pegawai = idPegawai,
-            tgl_absensi = tanggalSekarang,
-            gaji_harian = gajiHarian
-        )
+        // Cek apakah tanggalSekarang adalah tanggal merah di Firestore
+        db.collection("tanggal_merah")
+            .whereEqualTo("tanggalmerah", tanggalSekarang)
+            .get()
+            .addOnSuccessListener { tanggalMerahDocuments ->
+                val isTanggalMerah = !tanggalMerahDocuments.isEmpty
 
-        db.collection("data_absensi")
-            .add(absensi)
-            .addOnSuccessListener { documentReference ->
-                val generatedId = documentReference.id
-                db.collection("data_absensi").document(generatedId)
-                    .update("id", generatedId)
-                    .addOnSuccessListener {
-                        // Setelah absensi berhasil disimpan, update jumlah_absensi_mingguan pegawai
-                        updateJumlahAbsensiMingguan(idPegawai)
+                // Buat objek absensi dengan nilai tanggal_merah sesuai hasil cek tanggal merah
+                val absensi = ClsAbsensi(
+                    id = "",
+                    id_pegawai = idPegawai,
+                    tgl_absensi = tanggalSekarang,
+                    gaji_harian = gajiHarian,
+                    tanggal_merah = isTanggalMerah
+                )
+
+                // Simpan absensi ke Firestore
+                db.collection("data_absensi")
+                    .add(absensi)
+                    .addOnSuccessListener { documentReference ->
+                        val generatedId = documentReference.id
+                        db.collection("data_absensi").document(generatedId)
+                            .update("id", generatedId)
+                            .addOnSuccessListener {
+                                // Setelah absensi berhasil disimpan, update jumlah_absensi_mingguan pegawai
+                                updateJumlahAbsensiMingguan(idPegawai)
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Gagal memperbarui ID absensi: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(this, "Gagal memperbarui ID absensi: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Gagal menyimpan absensi: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Gagal menyimpan absensi: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Gagal mengecek tanggal merah: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     private fun updateJumlahAbsensiMingguan(idPegawai: String) {
         // Dapatkan dokumen pegawai
