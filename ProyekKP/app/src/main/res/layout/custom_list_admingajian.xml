@@ -62,7 +62,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="84dp"
         android:ems="10"
-        android:hint="Masukkan Jumlah Lembur"
+        android:hint="Jumlah Add-on"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

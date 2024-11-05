@@ -83,7 +83,8 @@ class Activity_Login : AppCompatActivity() {
     }
 
     private fun cekAbsensi(idPegawai: String, gajiHarian: Int) {
-        val tanggalSekarang = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+        //val tanggalSekarang = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+        val tanggalSekarang = Calendar.getInstance().time
 
         // Query ke Firestore untuk mendapatkan data pegawai dengan idPegawai
         db.collection("data_pegawai")
@@ -100,14 +101,14 @@ class Activity_Login : AppCompatActivity() {
                             .update("jumlah_absensi_mingguan", 1)
                             .addOnSuccessListener {
                                 // Lanjutkan dengan menyimpan absensi
-                                cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang)
+                                cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang.toString())
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(this, "Gagal memperbarui jumlah absensi: ${e.message}", Toast.LENGTH_SHORT).show()
                             }
                     } else {
                         // Lanjutkan jika jumlah absensi < 7
-                        cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang)
+                        cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang.toString())
                     }
                 } else {
                     Toast.makeText(this, "Pegawai tidak ditemukan", Toast.LENGTH_SHORT).show()
@@ -148,7 +149,7 @@ class Activity_Login : AppCompatActivity() {
                 val absensi = ClsAbsensi(
                     id = "",
                     id_pegawai = idPegawai,
-                    tgl_absensi = tanggalSekarang,
+                    tgl_absensi = Calendar.getInstance().time,
                     gaji_harian = gajiHarian,
                     tanggal_merah = isTanggalMerah
                 )

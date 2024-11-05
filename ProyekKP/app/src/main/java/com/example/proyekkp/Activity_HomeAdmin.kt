@@ -74,7 +74,7 @@ class Activity_HomeAdmin : AppCompatActivity() {
 
         // Ambil data absensi untuk setiap pegawai dari seminggu yang lalu hingga sekarang
         db.collection("data_absensi")
-            //.whereGreaterThanOrEqualTo("tgl_absensi", satuMingguLalu)
+            .whereGreaterThanOrEqualTo("tgl_absensi", satuMingguLalu)
             .get()
             .addOnSuccessListener { absensiDocuments ->
                 // Peta untuk melacak jumlah absen setiap pegawai
