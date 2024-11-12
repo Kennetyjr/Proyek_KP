@@ -9,20 +9,6 @@
         tools:context=".Activity_Register_Pegawai">
 
         <EditText
-            android:id="@+id/editTextText"
-            android:layout_width="327dp"
-            android:layout_height="56dp"
-            android:ems="10"
-            android:hint="Gaji bonus"
-            android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txt_reg_gajiharian"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/txt_reg_gajiharian"
-            app:layout_constraintTop_toBottomOf="@+id/txt_reg_gajiharian"
-            app:layout_constraintVertical_bias="0.232" />
-
-        <EditText
             android:id="@+id/txt_reg_namapegawai"
             android:layout_width="330dp"
             android:layout_height="52dp"
@@ -39,13 +25,13 @@
             android:id="@+id/txt_reg_idpegawai"
             android:layout_width="330dp"
             android:layout_height="57dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="ID Pegawai"
             android:inputType="text"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintHorizontal_bias="0.481"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,20 +70,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/editTextText"
-            android:layout_width="327dp"
-            android:layout_height="56dp"
-            android:ems="10"
-            android:hint="Gaji lembur"
-            android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txt_reg_gajiharian"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/txt_reg_gajiharian"
-            app:layout_constraintTop_toBottomOf="@+id/txt_reg_gajiharian"
-            app:layout_constraintVertical_bias="0.039" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

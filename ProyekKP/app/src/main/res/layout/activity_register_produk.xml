@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    tools:viewBindingIgnore="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_RegisterProduk">
+
+    <EditText
+        android:id="@+id/txtnamaproduk"
+        android:layout_width="336dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="136dp"
+        android:ems="10"
+        android:hint="Nama Produk"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.653"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtidproduk"
+        android:layout_width="331dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="76dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="ID Produk"
+        android:inputType="text"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/txtjumlahproduk"
+        app:layout_constraintStart_toStartOf="@+id/txtjumlahproduk"
+        app:layout_constraintTop_toBottomOf="@+id/txtjumlahproduk" />
+
+    <Button
+        android:id="@+id/btntambahproduk"
+        android:layout_width="322dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="548dp"
+        android:text="Tambahkan Produk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtjumlahproduk"
+        android:layout_width="341dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="72dp"
+        android:ems="10"
+        android:hint="Jumlah Produk (Kalau Ada)"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/txtnamaproduk"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/txtnamaproduk"
+        app:layout_constraintTop_toBottomOf="@+id/txtnamaproduk" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

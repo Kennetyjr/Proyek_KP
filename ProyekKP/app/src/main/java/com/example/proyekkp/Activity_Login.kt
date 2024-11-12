@@ -26,7 +26,17 @@ class Activity_Login : AppCompatActivity() {
         db = Firebase.firestore
 
         binding.btnkeregister.setOnClickListener {
+            val nextIntent = Intent(this, Activity_Register_Pegawai::class.java)
+            startActivity(nextIntent)
+        }
+
+        binding.btnmasuktanggalmerah.setOnClickListener {
             val nextIntent = Intent(this, TanggalMerahInputActivity::class.java)
+            startActivity(nextIntent)
+        }
+
+        binding.btnregisterproduk.setOnClickListener {
+            val nextIntent = Intent(this, Activity_RegisterProduk::class.java)
             startActivity(nextIntent)
         }
 
@@ -35,7 +45,6 @@ class Activity_Login : AppCompatActivity() {
             val password = binding.txtloginpassword.text.toString()
 
             if (idPegawai.isNotEmpty() && password.isNotEmpty()) {
-                // Cek data di Firestore
                 db.collection("data_pegawai")
                     .get()
                     .addOnSuccessListener { documents ->
@@ -49,14 +58,9 @@ class Activity_Login : AppCompatActivity() {
                                 val role = item.data["role"].toString()
 
                                 if (role == "pegawai") {
-                                    // Ambil gajiHarian dari Firestore berdasarkan idPegawai
                                     val gajiHarian = item.data["gajiHarian"].toString().toInt()
-
-                                    // Cek apakah sudah absen hari ini dan lakukan proses absen jika belum
                                     cekAbsensi(idPegawai, gajiHarian)
-
                                 } else if (role == "admin") {
-                                    // Pindah ke ActivityAdmin
                                     val nextIntent = Intent(this, Activity_HomeAdmin::class.java)
                                     startActivity(nextIntent)
                                     Toast.makeText(this, "Berhasil masuk sebagai Admin", Toast.LENGTH_SHORT).show()
@@ -138,12 +142,26 @@ class Activity_Login : AppCompatActivity() {
     }
 
     private fun simpanDataAbsensi(idPegawai: String, gajiHarian: Int, tanggalSekarang: String) {
+        // Format tanggal saat ini
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val formattedCurrentDate = dateFormat.format(Date())
+
         // Cek apakah tanggalSekarang adalah tanggal merah di Firestore
         db.collection("tanggal_merah")
-            .whereEqualTo("tanggalmerah", tanggalSekarang)
             .get()
             .addOnSuccessListener { tanggalMerahDocuments ->
-                val isTanggalMerah = !tanggalMerahDocuments.isEmpty
+                var isTanggalMerah = false
+
+                for (document in tanggalMerahDocuments) {
+                    val tanggalMerahDate = document.getDate("tanggalmerah")
+                    val formattedTanggalMerah = dateFormat.format(tanggalMerahDate)
+
+                    // Bandingkan tanggal (tanpa waktu)
+                    if (formattedCurrentDate == formattedTanggalMerah) {
+                        isTanggalMerah = true
+                        break
+                    }
+                }
 
                 // Buat objek absensi dengan nilai tanggal_merah sesuai hasil cek tanggal merah
                 val absensi = ClsAbsensi(
@@ -177,7 +195,6 @@ class Activity_Login : AppCompatActivity() {
                 Toast.makeText(this, "Gagal mengecek tanggal merah: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
 
     private fun updateJumlahAbsensiMingguan(idPegawai: String) {
         // Dapatkan dokumen pegawai

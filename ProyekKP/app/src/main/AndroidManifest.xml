@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ProyekKP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_RegisterProduk"
+            android:exported="false" />
+        <activity
             android:name=".Activity_HomeAdmin"
             android:exported="false" />
         <activity
