@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    tools:viewBindingIgnore="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_RegisterMesin">
+
+    <Button
+        android:id="@+id/btnsubmitregistermesin"
+        android:layout_width="238dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="512dp"
+        android:text="Submit Mesin"
+        app:layout_constraintEnd_toEndOf="@+id/txtnamamesin"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="@+id/txtnamamesin"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtnomesin"
+        android:layout_width="336dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="112dp"
+        android:ems="10"
+        android:hint="No Mesin"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtnamamesin"
+        android:layout_width="337dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="44dp"
+        android:ems="10"
+        android:hint="Nama Mesin"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/txtnomesin"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/txtnomesin"
+        app:layout_constraintTop_toBottomOf="@+id/txtnomesin" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -25,6 +25,11 @@ class Activity_Login : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         db = Firebase.firestore
 
+        binding.btnkeplotting.setOnClickListener {
+            val nextIntent = Intent(this, Activity_PlottingMesin::class.java)
+            startActivity(nextIntent)
+        }
+
         binding.btnkeregister.setOnClickListener {
             val nextIntent = Intent(this, Activity_Register_Pegawai::class.java)
             startActivity(nextIntent)
@@ -37,6 +42,11 @@ class Activity_Login : AppCompatActivity() {
 
         binding.btnregisterproduk.setOnClickListener {
             val nextIntent = Intent(this, Activity_RegisterProduk::class.java)
+            startActivity(nextIntent)
+        }
+
+        binding.btnregistermesin.setOnClickListener {
+            val nextIntent = Intent(this, Activity_RegisterMesin::class.java)
             startActivity(nextIntent)
         }
 

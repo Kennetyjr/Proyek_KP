@@ -59,9 +59,9 @@
             android:id="@+id/btnkeregister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="68dp"
-            android:layout_marginTop="392dp"
-            android:text="Register"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="328dp"
+            android:text="Register Pegawai"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,8 +69,8 @@
             android:id="@+id/btnmasuktanggalmerah"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="460dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="396dp"
             android:text="Masukkan Tanggal Merah"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -79,9 +79,29 @@
             android:id="@+id/btnregisterproduk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="564dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="468dp"
             android:text="Register Produk"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnregistermesin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="536dp"
+            android:text="Register Mesin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnkeplotting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="616dp"
+            android:text="Plotting Mesin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
