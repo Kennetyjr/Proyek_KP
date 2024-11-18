@@ -21,8 +21,8 @@
         android:id="@+id/spinnerNamaPegawai"
         android:layout_width="354dp"
         android:layout_height="58dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="148dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="128dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,17 +30,17 @@
         android:id="@+id/spinnerNamaProduk"
         android:layout_width="351dp"
         android:layout_height="59dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="240dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="220dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/txtqtyproduk"
-        android:layout_width="316dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="392dp"
+        android:layout_width="332dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="348dp"
         android:ems="10"
         android:hint="Quantity"
         android:inputType="number"
@@ -51,8 +51,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="356dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="316dp"
         android:text="Masukkan Jumlah Produk Yang Sudah Dibuat :"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -61,10 +61,62 @@
         android:id="@+id/btnsimpanplotting"
         android:layout_width="310dp"
         android:layout_height="61dp"
-        android:layout_marginTop="540dp"
+        android:layout_marginTop="604dp"
         android:text="Simpan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:text="No Mesin :"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="108dp"
+        android:text="Nama Pegawai :"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="200dp"
+        android:text="Nama Produk : "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtketeranganplotting"
+        android:layout_width="326dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="456dp"
+        android:ems="10"
+        android:hint="Keterangan"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="424dp"
+        android:text="Keterangan :"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

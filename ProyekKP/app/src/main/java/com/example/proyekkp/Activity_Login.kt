@@ -50,6 +50,11 @@ class Activity_Login : AppCompatActivity() {
             startActivity(nextIntent)
         }
 
+        binding.btnlistplotting.setOnClickListener {
+            val nextIntent = Intent(this, Activity_HalamanListPlotting::class.java)
+            startActivity(nextIntent)
+        }
+
         binding.btnlogin.setOnClickListener {
             val idPegawai = binding.txtloginname.text.toString()
             val password = binding.txtloginpassword.text.toString()

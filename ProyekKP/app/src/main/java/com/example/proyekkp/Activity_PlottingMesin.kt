@@ -34,6 +34,7 @@ class Activity_PlottingMesin : AppCompatActivity() {
             val namaProduk = binding.spinnerNamaProduk.selectedItem?.toString()
             val qtyText = binding.txtqtyproduk.text.toString()
             val quantity = qtyText.toIntOrNull()
+            val keterangan = binding.txtketeranganplotting.text.toString()
 
             if (noMesin != null && namaPegawai != null && namaProduk != null && quantity != null && quantity > 0) {
                 // Cari idMesin berdasarkan noMesin
@@ -53,7 +54,7 @@ class Activity_PlottingMesin : AppCompatActivity() {
 
                                     if (idPegawai != null) {
                                         // Simpan plotting mesin
-                                        savePlottingMesin(idMesin, noMesin, idPegawai, namaPegawai, namaProduk, quantity)
+                                        savePlottingMesin(idMesin, noMesin, idPegawai, namaPegawai, namaProduk, quantity, keterangan)
                                     } else {
                                         Toast.makeText(this, "Pegawai tidak ditemukan.", Toast.LENGTH_SHORT).show()
                                     }
@@ -80,19 +81,22 @@ class Activity_PlottingMesin : AppCompatActivity() {
         idPegawai: String,
         namaPegawai: String,
         namaProduk: String,
-        quantity: Int
+        quantity: Int,
+        keterangan: String
     ) {
-        val newPlotting = ClsPlottingMesin(
-            id = "",
-            idMesin = idMesin,
-            noMesin = noMesin,
-            idPegawai = idPegawai,
-            namaPegawai = namaPegawai,
-            namaProduk = namaProduk,
-            quantity = quantity,
-            Keterangan = "Aktif"
+        val newPlotting = hashMapOf(
+            "id" to "",
+            "idMesin" to idMesin,
+            "noMesin" to noMesin,
+            "idPegawai" to idPegawai,
+            "namaPegawai" to namaPegawai,
+            "namaProduk" to namaProduk,
+            "quantity" to quantity,
+            "Keterangan" to keterangan,
+            "tanggalplotting" to com.google.firebase.firestore.FieldValue.serverTimestamp()
         )
 
+        // Simpan plotting mesin ke data_plotting_mesin
         db.collection("data_plotting_mesin")
             .add(newPlotting)
             .addOnSuccessListener { documentReference ->
@@ -100,8 +104,8 @@ class Activity_PlottingMesin : AppCompatActivity() {
                 db.collection("data_plotting_mesin").document(generatedId)
                     .update("id", generatedId)
                     .addOnSuccessListener {
-                        Toast.makeText(this, "Plotting berhasil disimpan.", Toast.LENGTH_SHORT).show()
-                        clearFields()
+                        // Setelah berhasil menyimpan plotting, tambahkan jumlah barang
+                        updateProductQuantity(namaProduk, quantity)
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(this, "Gagal memperbarui ID: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -111,6 +115,40 @@ class Activity_PlottingMesin : AppCompatActivity() {
                 Toast.makeText(this, "Gagal menyimpan plotting: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+    private fun updateProductQuantity(namaProduk: String, quantity: Int) {
+        db.collection("data_produk")
+            .whereEqualTo("namaProduk", namaProduk)
+            .get()
+            .addOnSuccessListener { productDocuments ->
+                val productDocument = productDocuments.documents.firstOrNull()
+
+                if (productDocument != null) {
+                    val productId = productDocument.id
+                    val currentQuantity = productDocument.getLong("jumlahBarang") ?: 0
+
+                    // Tambahkan quantity ke jumlahBarang
+                    val updatedQuantity = currentQuantity + quantity
+
+                    // Perbarui jumlahBarang di data_produk
+                    db.collection("data_produk").document(productId)
+                        .update("jumlahBarang", updatedQuantity)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Jumlah barang berhasil diperbarui.", Toast.LENGTH_SHORT).show()
+                            clearFields()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Gagal memperbarui jumlah barang: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this, "Produk tidak ditemukan.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Gagal mencari produk: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
     private fun loadNoMesinSpinner() {
         db.collection("data_mesin")
@@ -129,10 +167,17 @@ class Activity_PlottingMesin : AppCompatActivity() {
 
     private fun loadNamaPegawaiSpinner() {
         db.collection("data_pegawai")
-            .whereEqualTo("status", true)
+            .whereEqualTo("status", true) // Hanya memuat pegawai yang aktif
             .get()
             .addOnSuccessListener { documents ->
-                val namaPegawaiList = documents.mapNotNull { it.getString("namaPegawai") }
+                // Filter data untuk menghindari Admin (idPegawai = "A001")
+                val namaPegawaiList = documents.filterNot {
+                    it.getString("idpegawai") == "A001"
+                }.mapNotNull {
+                    it.getString("namaPegawai")
+                }
+
+                // Set adapter untuk spinner
                 val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, namaPegawaiList)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.spinnerNamaPegawai.adapter = adapter
@@ -162,6 +207,7 @@ class Activity_PlottingMesin : AppCompatActivity() {
         binding.spinnerNamaPegawai.setSelection(0)
         binding.spinnerNamaProduk.setSelection(0)
         binding.txtqtyproduk.text.clear()
+        binding.txtketeranganplotting.text.clear()
     }
 }
 
