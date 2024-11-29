@@ -17,6 +17,8 @@ class Activity_Login : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
     lateinit var binding: ActivityLoginBinding
+    lateinit var adapter: AdapterListAbsenHariIni
+    var absensiList = ArrayList<ClsAbsensi>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,33 +27,15 @@ class Activity_Login : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         db = Firebase.firestore
 
-        binding.btnkeplotting.setOnClickListener {
-            val nextIntent = Intent(this, Activity_PlottingMesin::class.java)
-            startActivity(nextIntent)
-        }
+        // Setup ListView Adapter
+        adapter = AdapterListAbsenHariIni(this, absensiList)
+        binding.listviewabsenhariini.adapter = adapter
 
-        binding.btnkeregister.setOnClickListener {
-            val nextIntent = Intent(this, Activity_Register_Pegawai::class.java)
-            startActivity(nextIntent)
-        }
+        // Mengambil data absensi hari ini
+        loadAbsensiHariIni()
 
-        binding.btnmasuktanggalmerah.setOnClickListener {
-            val nextIntent = Intent(this, TanggalMerahInputActivity::class.java)
-            startActivity(nextIntent)
-        }
-
-        binding.btnregisterproduk.setOnClickListener {
-            val nextIntent = Intent(this, Activity_RegisterProduk::class.java)
-            startActivity(nextIntent)
-        }
-
-        binding.btnregistermesin.setOnClickListener {
-            val nextIntent = Intent(this, Activity_RegisterMesin::class.java)
-            startActivity(nextIntent)
-        }
-
-        binding.btnlistplotting.setOnClickListener {
-            val nextIntent = Intent(this, Activity_HalamanListPlotting::class.java)
+        binding.btnkeadmin.setOnClickListener {
+            val nextIntent = Intent(this, Activity_HomeUtamaAdmin::class.java)
             startActivity(nextIntent)
         }
 
@@ -85,6 +69,8 @@ class Activity_Login : AppCompatActivity() {
                         }
                         if (!userFound) {
                             Toast.makeText(this, "ID Pegawai atau Password salah", Toast.LENGTH_SHORT).show()
+                        } else {
+                            clearTextFields()
                         }
                     }
                     .addOnFailureListener { exception ->
@@ -97,8 +83,44 @@ class Activity_Login : AppCompatActivity() {
 
 
         binding.btntohomepegawai.setOnClickListener {
-            //ke halaman pegawai
+            val idPegawai = binding.txtloginname.text.toString()
+            val password = binding.txtloginpassword.text.toString()
+
+            if (idPegawai.isNotEmpty() && password.isNotEmpty()) {
+                db.collection("data_pegawai")
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        var userFound = false
+                        for (item in documents) {
+                            val dbIdPegawai = item.data["idpegawai"].toString()
+                            val dbPassword = item.data["password"].toString()
+
+                            if (dbIdPegawai == idPegawai && dbPassword == password) {
+                                userFound = true
+                                val nextIntent = Intent(this, Activity_Home_Pegawai::class.java)
+                                // Mengirim idPegawai dan password ke Activity_Home_Pegawai
+                                nextIntent.putExtra("ID_PEGAWAI", idPegawai)
+                                nextIntent.putExtra("PASSWORD", password)
+                                startActivity(nextIntent)
+                                Toast.makeText(this, "Berhasil masuk sebagai Pegawai", Toast.LENGTH_SHORT).show()
+                                break
+                            }
+                        }
+                        if (!userFound) {
+                            Toast.makeText(this, "ID Pegawai atau Password salah", Toast.LENGTH_SHORT).show()
+                        } else {
+                            clearTextFields()
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Gagal terhubung ke database: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "ID Pegawai dan Password harus diisi", Toast.LENGTH_SHORT).show()
+            }
         }
+
+
     }
 
     private fun cekAbsensi(idPegawai: String, gajiHarian: Int) {
@@ -235,6 +257,55 @@ class Activity_Login : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal mengambil data pegawai untuk update absensi mingguan: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun loadAbsensiHariIni() {
+        // Ambil tanggal hari ini
+        val tanggalSekarang = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+
+        db.collection("data_absensi")
+            .whereEqualTo("tgl_absensi", tanggalSekarang)
+            .get()
+            .addOnSuccessListener { documents ->
+                absensiList.clear() // Clear previous data
+                for (document in documents) {
+                    val idPegawai = document.getString("id_pegawai") ?: ""
+                    val tglAbsensi = document.getString("tgl_absensi") ?: ""
+                    val gajiHarian = document.getLong("gaji_harian")?.toInt() ?: 0
+                    val tanggalMerah = document.getBoolean("tanggal_merah") ?: false
+
+                    // Ambil data pegawai untuk menampilkan nama
+                    db.collection("data_pegawai")
+                        .whereEqualTo("idpegawai", idPegawai)
+                        .get()
+                        .addOnSuccessListener { pegawaiDocuments ->
+                            if (!pegawaiDocuments.isEmpty) {
+                                val pegawai = pegawaiDocuments.documents[0]
+                                val namaPegawai = pegawai.getString("namaPegawai") ?: "Nama Tidak Ditemukan"
+
+                                // Tambahkan absensi ke list
+                                absensiList.add(
+                                    ClsAbsensi(
+                                        id = "",
+                                        id_pegawai = idPegawai,
+                                        tgl_absensi = Date(),
+                                        gaji_harian = gajiHarian,
+                                        tanggal_merah = tanggalMerah
+                                    )
+                                )
+                                adapter.notifyDataSetChanged() // Update ListView
+                            }
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Gagal mengambil absensi hari ini: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun clearTextFields() {
+        binding.txtloginname.text.clear()
+        binding.txtloginpassword.text.clear()
     }
 
 }

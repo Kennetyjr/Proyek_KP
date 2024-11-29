@@ -19,7 +19,7 @@ class Activity_HalamanListPlotting : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_halaman_list_plotting)
-
+ 
         db = FirebaseFirestore.getInstance()
 
         // Inisialisasi adapter untuk ListView

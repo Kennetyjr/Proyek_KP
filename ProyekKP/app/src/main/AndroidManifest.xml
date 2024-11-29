@@ -13,6 +13,18 @@
         android:theme="@style/Theme.ProyekKP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_ProfilePegawai"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_HistoryPenjualan"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Penjualan"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_HomeUtamaAdmin"
+            android:exported="false" />
+        <activity
             android:name=".Activity_HalamanListPlotting"
             android:exported="false" />
         <activity

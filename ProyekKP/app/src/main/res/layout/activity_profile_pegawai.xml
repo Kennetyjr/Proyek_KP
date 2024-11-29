@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    tools:viewBindingIgnore="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_ProfilePegawai">
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Profile Pegawai"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtprofilenamapegawai"
+        android:layout_width="302dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtprofileidpegawai"
+        android:layout_width="302dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/txtprofilenamapegawai"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtprofilenamapegawai"
+        app:layout_constraintTop_toBottomOf="@+id/txtprofilenamapegawai" />
+
+    <EditText
+        android:id="@+id/txtprofilepasswordpegawai"
+        android:layout_width="308dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/txtprofileidpegawai"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtprofileidpegawai"
+        app:layout_constraintTop_toBottomOf="@+id/txtprofileidpegawai" />
+
+    <EditText
+        android:id="@+id/txtprofilenotelppegawai"
+        android:layout_width="305dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/txtprofilepasswordpegawai"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtprofilepasswordpegawai"
+        app:layout_constraintTop_toBottomOf="@+id/txtprofilepasswordpegawai" />
+
+    <Button
+        android:id="@+id/btnupdateprofile"
+        android:layout_width="119dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="80dp"
+        android:text="Update"
+        app:layout_constraintEnd_toEndOf="@+id/txtprofilenotelppegawai"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/txtprofilenotelppegawai"
+        app:layout_constraintTop_toBottomOf="@+id/txtprofilenotelppegawai" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
