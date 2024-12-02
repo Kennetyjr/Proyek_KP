@@ -41,10 +41,6 @@ class Activity_Home_Pegawai : AppCompatActivity() {
             startActivity(nextIntent)
         }
 
-        binding.btnhistorypegawaiabsen.setOnClickListener {
-            val nextIntent = Intent(this, Activity_HistoryPenjualan::class.java)
-            startActivity(nextIntent)
-        }
 
         idPegawai = intent.getStringExtra("ID_PEGAWAI")
         password = intent.getStringExtra("PASSWORD")

@@ -75,6 +75,7 @@ class Activity_Register_Pegawai : AppCompatActivity() {
                             .update("id", firebaseId)
                             .addOnSuccessListener {
                                 Toast.makeText(this, "Pegawai berhasil didaftarkan dengan ID: $idPegawai", Toast.LENGTH_SHORT).show()
+                                clearTextFields()
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(this, "Error updating document ID: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -87,5 +88,11 @@ class Activity_Register_Pegawai : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error fetching existing records: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun clearTextFields() {
+        binding.txtRegNamapegawai.text.clear()
+        binding.txtRegNotelpon.text.clear()
+        binding.txtRegGajiharian.text.clear()
     }
 }

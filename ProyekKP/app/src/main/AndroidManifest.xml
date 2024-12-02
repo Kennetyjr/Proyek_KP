@@ -13,6 +13,18 @@
         android:theme="@style/Theme.ProyekKP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_AdminPasswordChange"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_EditMesin"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_EditProduk"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_EditPegawai"
+            android:exported="false" />
+        <activity
             android:name=".Activity_ProfilePegawai"
             android:exported="false" />
         <activity

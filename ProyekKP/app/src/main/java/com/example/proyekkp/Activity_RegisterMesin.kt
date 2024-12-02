@@ -33,57 +33,28 @@ class Activity_RegisterMesin : AppCompatActivity() {
                     .get()
                     .addOnSuccessListener { documents ->
                         if (documents.isEmpty) {
-                            val initials = generateInitials(namaMesin)
-
-                            // Periksa nomor urut tertinggi di data_mesin untuk ID Mesin
-                            db.collection("data_mesin")
-                                .whereGreaterThanOrEqualTo("idMesin", initials)
-                                .whereLessThan("idMesin", initials + "Z")
-                                .get()
-                                .addOnSuccessListener { docs ->
-                                    val maxNumber = docs.mapNotNull { doc ->
-                                        doc.getString("idMesin")?.removePrefix(initials)?.toIntOrNull()
-                                    }.maxOrNull() ?: 0
-
-                                    val nextNumber = maxNumber + 1
-                                    val idMesin = "$initials${String.format("%03d", nextNumber)}"
-
-                                    // Buat data mesin baru dengan statusMesin default true
-                                    val newMachine = ClsMesin(
-                                        id = "",
-                                        idMesin = idMesin,
-                                        noMesin = noMesin,
-                                        namaMesin = namaMesin,
-                                        statusmesin = true
-                                    )
-
-                                    // Simpan mesin ke Firestore
-                                    db.collection("data_mesin")
-                                        .add(newMachine)
-                                        .addOnSuccessListener { documentReference ->
-                                            val generatedId = documentReference.id
-
-                                            // Update dokumen dengan `id` dari Firestore
-                                            db.collection("data_mesin").document(generatedId)
-                                                .update("id", generatedId)
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(this, "Mesin berhasil ditambahkan dengan ID: $idMesin", Toast.LENGTH_SHORT).show()
-                                                    clearFields()
-                                                }
-                                                .addOnFailureListener { e ->
-                                                    Toast.makeText(this, "Gagal memperbarui ID mesin: ${e.message}", Toast.LENGTH_SHORT).show()
-                                                }
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Toast.makeText(this, "Gagal menambahkan mesin: ${e.message}", Toast.LENGTH_SHORT).show()
-                                        }
-                                }
-                                .addOnFailureListener { e ->
-                                    Toast.makeText(this, "Gagal memeriksa ID mesin: ${e.message}", Toast.LENGTH_SHORT).show()
-                                }
+                            // Jika noMesin belum digunakan, langsung register mesin baru
+                            registerNewMesin(noMesin, namaMesin)
                         } else {
-                            // Jika noMesin sudah ada
-                            Toast.makeText(this, "Nomor Mesin ini sudah dipakai. Silakan pilih nomor lain.", Toast.LENGTH_SHORT).show()
+                            val existingDoc = documents.first()
+                            val statusMesin = existingDoc.getBoolean("statusmesin") ?: true
+
+                            if (!statusMesin) {
+                                // Jika noMesin ada tapi statusmesin false, bisa didaftarkan ulang
+                                val id = existingDoc.id
+                                db.collection("data_mesin").document(id)
+                                    .update("namaMesin", namaMesin, "statusmesin", true)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(this, "Mesin berhasil didaftarkan ulang.", Toast.LENGTH_SHORT).show()
+                                        clearFields()
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Toast.makeText(this, "Gagal memperbarui data mesin: ${e.message}", Toast.LENGTH_SHORT).show()
+                                    }
+                            } else {
+                                // Jika noMesin ada dan statusmesin true, tidak bisa didaftarkan ulang
+                                Toast.makeText(this, "Nomor Mesin ini sudah aktif. Silakan gunakan nomor lain.", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                     .addOnFailureListener { e ->
@@ -93,6 +64,57 @@ class Activity_RegisterMesin : AppCompatActivity() {
                 Toast.makeText(this, "Nomor Mesin dan Nama Mesin harus diisi", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun registerNewMesin(noMesin: String, namaMesin: String) {
+        val initials = generateInitials(namaMesin)
+
+        // Periksa nomor urut tertinggi di data_mesin untuk ID Mesin
+        db.collection("data_mesin")
+            .whereGreaterThanOrEqualTo("idMesin", initials)
+            .whereLessThan("idMesin", initials + "Z")
+            .get()
+            .addOnSuccessListener { docs ->
+                val maxNumber = docs.mapNotNull { doc ->
+                    doc.getString("idMesin")?.removePrefix(initials)?.toIntOrNull()
+                }.maxOrNull() ?: 0
+
+                val nextNumber = maxNumber + 1
+                val idMesin = "$initials${String.format("%03d", nextNumber)}"
+
+                // Buat data mesin baru dengan statusMesin default true
+                val newMachine = ClsMesin(
+                    id = "",
+                    idMesin = idMesin,
+                    noMesin = noMesin,
+                    namaMesin = namaMesin,
+                    statusmesin = true
+                )
+
+                // Simpan mesin ke Firestore
+                db.collection("data_mesin")
+                    .add(newMachine)
+                    .addOnSuccessListener { documentReference ->
+                        val generatedId = documentReference.id
+
+                        // Update dokumen dengan `id` dari Firestore
+                        db.collection("data_mesin").document(generatedId)
+                            .update("id", generatedId)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Mesin berhasil ditambahkan dengan ID: $idMesin", Toast.LENGTH_SHORT).show()
+                                clearFields()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Gagal memperbarui ID mesin: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Gagal menambahkan mesin: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Gagal memeriksa ID mesin: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun generateInitials(namaMesin: String): String {

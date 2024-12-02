@@ -35,8 +35,8 @@ class TanggalMerahInputActivity : AppCompatActivity() {
 
         btn_tambah.setOnClickListener {
             val keterangan = txt_keterangan.text.toString()
-            val pengkali = txt_pengkali.text.toString()
-            val jenis = txt_jenis.text.toString()
+            val pengkali = "1.5"
+            val jenis = "lokal"
 
             val selectedYear = datePicker.year
             val selectedMonth = datePicker.month

@@ -20,19 +20,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txtnomesin"
-        android:layout_width="336dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="112dp"
-        android:ems="10"
-        android:hint="No Mesin"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
         android:id="@+id/txtnamamesin"
         android:layout_width="337dp"
         android:layout_height="53dp"
@@ -41,9 +28,31 @@
         android:hint="Nama Mesin"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="@+id/txtnomesin"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="@+id/txtnomesin"
         app:layout_constraintTop_toBottomOf="@+id/txtnomesin" />
+
+    <EditText
+        android:id="@+id/txtnomesin"
+        android:layout_width="333dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:hint="No Mesin"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Register Mesin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

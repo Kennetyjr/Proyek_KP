@@ -63,5 +63,30 @@ class Activity_HomeUtamaAdmin : AppCompatActivity() {
             startActivity(nextIntent)
         }
 
+        binding.btnadminkepenjualan.setOnClickListener {
+            val nextIntent = Intent(this, Activity_Penjualan::class.java)
+            startActivity(nextIntent)
+        }
+
+        binding.btnkeeditpegawai.setOnClickListener {
+            val nextIntent = Intent(this, Activity_EditPegawai::class.java)
+            startActivity(nextIntent)
+        }
+
+        binding.btnkeeditproduk.setOnClickListener {
+            val nextIntent = Intent(this, Activity_EditProduk::class.java)
+            startActivity(nextIntent)
+        }
+
+        binding.btnkeeditmesin.setOnClickListener {
+            val nextIntent = Intent(this, Activity_EditMesin::class.java)
+            startActivity(nextIntent)
+        }
+
+        binding.btnkeadminchane.setOnClickListener {
+            val nextIntent = Intent(this, Activity_AdminPasswordChange::class.java)
+            startActivity(nextIntent)
+        }
+
     }
 }

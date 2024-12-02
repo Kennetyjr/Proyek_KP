@@ -27,12 +27,13 @@ class Activity_Login : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         db = Firebase.firestore
 
-        // Setup ListView Adapter
-        adapter = AdapterListAbsenHariIni(this, absensiList)
-        binding.listviewabsenhariini.adapter = adapter
+        // Inisialisasi Adapter
+//        adapter = AdapterListAbsenHariIni(this, absensiList)
+//        binding.listviewabsenhariini.adapter = adapter
 
-        // Mengambil data absensi hari ini
-        loadAbsensiHariIni()
+        // Load data absensi hari ini saat aplikasi dijalankan
+        //loadAbsensiHariIni()
+
 
         binding.btnkeadmin.setOnClickListener {
             val nextIntent = Intent(this, Activity_HomeUtamaAdmin::class.java)
@@ -161,22 +162,39 @@ class Activity_Login : AppCompatActivity() {
     }
 
     private fun cekAbsensiHariIni(idPegawai: String, gajiHarian: Int, tanggalSekarang: String) {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) // Format tanggal tanpa waktu
+        val formattedTanggalSekarang = dateFormat.format(Date()) // Dapatkan tanggal hari ini dalam format yang sama
+
         db.collection("data_absensi")
             .whereEqualTo("id_pegawai", idPegawai)
-            .whereEqualTo("tgl_absensi", tanggalSekarang)
             .get()
             .addOnSuccessListener { documents ->
-                if (documents.isEmpty) {
-                    // Belum absen hari ini, simpan absensi
-                    simpanDataAbsensi(idPegawai, gajiHarian, tanggalSekarang)
-                } else {
+                var sudahAbsen = false
+
+                for (document in documents) {
+                    val tglAbsensi = document.getDate("tgl_absensi") // Ambil tanggal absensi yang ada di database
+                    val formattedTglAbsensi = dateFormat.format(tglAbsensi) // Format tanggal absensi yang ada
+
+                    if (formattedTglAbsensi == formattedTanggalSekarang) {
+                        // Jika sudah ada absensi untuk tanggal yang sama
+                        sudahAbsen = true
+                        break
+                    }
+                }
+
+                if (sudahAbsen) {
+                    // Jika sudah absen, tampilkan pesan
                     Toast.makeText(this, "Anda sudah absen hari ini.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Jika belum absen, simpan absensi
+                    simpanDataAbsensi(idPegawai, gajiHarian, tanggalSekarang)
                 }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Gagal mengecek absensi: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     private fun simpanDataAbsensi(idPegawai: String, gajiHarian: Int, tanggalSekarang: String) {
         // Format tanggal saat ini
@@ -259,49 +277,32 @@ class Activity_Login : AppCompatActivity() {
             }
     }
 
-    private fun loadAbsensiHariIni() {
-        // Ambil tanggal hari ini
-        val tanggalSekarang = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+//    private fun loadAbsensiHariIni() {
+//        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+//        val currentDate = dateFormat.format(Date()) // Format tanggal hari ini
+//
+//        absensiList.clear() // Bersihkan list sebelumnya
+//        db.collection("data_absensi")
+//            .whereEqualTo("tgl_absensi", currentDate)
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                for (document in documents) {
+//                    val absensi = ClsAbsensi(
+//                        id = document.getString("id") ?: "",
+//                        id_pegawai = document.getString("id_pegawai") ?: "",
+//                        tgl_absensi = document.getDate("tgl_absensi") ?: Date(),
+//                        gaji_harian = document.getLong("gaji_harian")?.toInt() ?: 0,
+//                        tanggal_merah = document.getBoolean("tanggal_merah") ?: false
+//                    )
+//                    absensiList.add(absensi) // Tambahkan ke list
+//                }
+//                adapter.notifyDataSetChanged() // Refresh adapter
+//            }
+//            .addOnFailureListener { e ->
+//                Toast.makeText(this, "Gagal memuat data absensi: ${e.message}", Toast.LENGTH_SHORT).show()
+//            }
+//    }
 
-        db.collection("data_absensi")
-            .whereEqualTo("tgl_absensi", tanggalSekarang)
-            .get()
-            .addOnSuccessListener { documents ->
-                absensiList.clear() // Clear previous data
-                for (document in documents) {
-                    val idPegawai = document.getString("id_pegawai") ?: ""
-                    val tglAbsensi = document.getString("tgl_absensi") ?: ""
-                    val gajiHarian = document.getLong("gaji_harian")?.toInt() ?: 0
-                    val tanggalMerah = document.getBoolean("tanggal_merah") ?: false
-
-                    // Ambil data pegawai untuk menampilkan nama
-                    db.collection("data_pegawai")
-                        .whereEqualTo("idpegawai", idPegawai)
-                        .get()
-                        .addOnSuccessListener { pegawaiDocuments ->
-                            if (!pegawaiDocuments.isEmpty) {
-                                val pegawai = pegawaiDocuments.documents[0]
-                                val namaPegawai = pegawai.getString("namaPegawai") ?: "Nama Tidak Ditemukan"
-
-                                // Tambahkan absensi ke list
-                                absensiList.add(
-                                    ClsAbsensi(
-                                        id = "",
-                                        id_pegawai = idPegawai,
-                                        tgl_absensi = Date(),
-                                        gaji_harian = gajiHarian,
-                                        tanggal_merah = tanggalMerah
-                                    )
-                                )
-                                adapter.notifyDataSetChanged() // Update ListView
-                            }
-                        }
-                }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Gagal mengambil absensi hari ini: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
 
     private fun clearTextFields() {
         binding.txtloginname.text.clear()

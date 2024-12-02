@@ -22,7 +22,7 @@
             android:id="@+id/btninputplot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="96dp"
             android:layout_marginTop="96dp"
             android:text="Masukkan Plotting Produk"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,8 @@
             android:id="@+id/btnlihatlistplotting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="172dp"
+            android:layout_marginStart="124dp"
+            android:layout_marginTop="188dp"
             android:text="Lihat List Plotting"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,19 +42,10 @@
             android:id="@+id/btnkepenjualan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="252dp"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="364dp"
             android:text="Penjualan Produk"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btnhistorypegawaiabsen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="576dp"
-            android:text="Lihat History Absen"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,8 +53,8 @@
             android:id="@+id/btnprofilepegawai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="324dp"
+            android:layout_marginStart="124dp"
+            android:layout_marginTop="272dp"
             android:text="Profile Pegawai"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
