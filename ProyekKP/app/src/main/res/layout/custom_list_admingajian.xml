@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/txtnamapegawai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
+        android:layout_marginStart="152dp"
         android:layout_marginTop="16dp"
         android:text="txtnamapegawai"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,8 @@
         android:id="@+id/txtabsensiMingguan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="292dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="52dp"
         android:text="txtabsensiMingguan"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +42,7 @@
         android:layout_marginStart="160dp"
         android:layout_marginTop="52dp"
         android:text="txtbonus"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,8 +50,8 @@
         android:id="@+id/txttotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="348dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="256dp"
         android:text="txttotal"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,8 +61,8 @@
         android:id="@+id/txtgajiharian"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="88dp"
         android:text="txtgajiharian"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -70,10 +71,10 @@
         android:id="@+id/txtinputlembur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="196dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="116dp"
         android:ems="10"
-        android:hint="Adds-on"
+        android:hint="Lembur (Jika Ada)"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -82,11 +83,12 @@
         android:id="@+id/txtfullminggumasukgaji"
         android:layout_width="265dp"
         android:layout_height="59dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Bonus Masuk Full Seminggu"
         android:inputType="number"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,9 +96,16 @@
         android:id="@+id/btnhitungtotalakhir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="188dp"
         android:text="Hitung Total"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="308dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

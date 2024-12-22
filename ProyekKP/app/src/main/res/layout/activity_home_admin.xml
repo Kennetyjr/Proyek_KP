@@ -10,18 +10,19 @@
 
         <ListView
             android:id="@+id/listviewadmingajian"
-            android:layout_width="404dp"
-            android:layout_height="673dp"
-            android:layout_marginBottom="16dp"
+            android:layout_width="410dp"
+            android:layout_height="571dp"
+            android:layout_marginBottom="104dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="268dp"
+            android:layout_marginStart="296dp"
             android:layout_marginTop="16dp"
             android:text="tanggalakhir"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +35,17 @@
             android:layout_marginStart="28dp"
             android:layout_marginTop="16dp"
             android:text="tanggalawal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnresettotalabsen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="656dp"
+            android:text="Reset Absensi"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

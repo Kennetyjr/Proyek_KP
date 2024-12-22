@@ -88,5 +88,12 @@ class Activity_HomeUtamaAdmin : AppCompatActivity() {
             startActivity(nextIntent)
         }
 
+        binding.btnlihatsemuapegawaiaktif.setOnClickListener {
+            val nextIntent = Intent(this, Activity_LihatPegawaiAktif::class.java)
+            startActivity(nextIntent)
+        }
+
+
+
     }
 }

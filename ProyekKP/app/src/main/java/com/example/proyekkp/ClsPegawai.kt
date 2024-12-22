@@ -10,6 +10,7 @@ data class ClsPegawai(
     var password: String,
     var no_telpon: Int,
     var gaji_harian: Int,
+    var gaji_mingguan : Int,
     var role: String,
     var status: Boolean,
     var id: String = "",

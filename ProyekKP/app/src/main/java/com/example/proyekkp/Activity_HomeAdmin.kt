@@ -32,7 +32,46 @@ class Activity_HomeAdmin : AppCompatActivity() {
 
         loadDataPegawai()
         setDateRangeText() // Memasukkan tanggal awal dan akhir minggu ke dalam textView
+
+        binding.btnresettotalabsen.setOnClickListener {
+            resetJumlahAbsensiMingguan()
+        }
     }
+
+    private fun resetJumlahAbsensiMingguan() {
+        db.collection("data_pegawai")
+            .whereEqualTo("role", "pegawai")
+            .whereEqualTo("status", true)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val documentId = document.id
+
+                    // Update jumlah_absensi_mingguan menjadi 0 untuk setiap pegawai
+                    db.collection("data_pegawai")
+                        .document(documentId)
+                        .update("jumlah_absensi_mingguan", 0)
+                        .addOnSuccessListener {
+                            // Jika berhasil, lanjutkan ke pegawai berikutnya
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(this, "Gagal mereset data: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+
+                // Setelah semua berhasil direset, perbarui data di listView
+                for (pegawai in listPegawai) {
+                    pegawai.jumlah_absensi_mingguan = 0
+                }
+
+                adapterListPegawaiGaji.notifyDataSetChanged()
+                Toast.makeText(this, "Jumlah absensi mingguan berhasil direset", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Gagal mengambil data pegawai: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
     private fun setDateRangeText() {
         // Mengatur format tanggal
@@ -64,6 +103,7 @@ class Activity_HomeAdmin : AppCompatActivity() {
                         password = document.getString("password") ?: "",
                         no_telpon = document.getString("noTelpon")?.toInt() ?: 0,
                         gaji_harian = document.getLong("gajiHarian")?.toInt() ?: 0,
+                        gaji_mingguan = document.getLong("gajiMingguan")?.toInt() ?: 0,
                         jumlah_absensi_mingguan = 0, // Akan diperbarui berdasarkan data absensi
                         role = "pegawai",
                         status = true

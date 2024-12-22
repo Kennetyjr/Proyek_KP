@@ -23,21 +23,20 @@ class Activity_Register_Pegawai : AppCompatActivity() {
         db = Firebase.firestore
 
         binding.btnRegSave.setOnClickListener {
-            val namaPegawai = binding.txtRegNamapegawai.text.toString()
-            val noTelpon = binding.txtRegNotelpon.text.toString()
+            val namaPegawai = binding.txtRegNamapegawai.text.toString().trim()
+            val noTelpon = binding.txtRegNotelpon.text.toString().trim()
             val gajiHarian = binding.txtRegGajiharian.text.toString().toIntOrNull()
+            val gajiMingguan = binding.txtRegGajimingguan.text.toString().toIntOrNull()
 
-            if (namaPegawai.isNotEmpty() && noTelpon.isNotEmpty() && gajiHarian != null) {
-                // Call the method to generate ID and save the employee
-                generateIdAndSaveEmployee(namaPegawai, noTelpon, gajiHarian)
+            if (namaPegawai.isNotEmpty() && noTelpon.isNotEmpty() && gajiHarian != null && gajiMingguan != null) {
+                generateIdAndSaveEmployee(namaPegawai, noTelpon, gajiHarian, gajiMingguan)
             } else {
-                Toast.makeText(this, "Semua field harus diisi dengan benar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Semua field harus diisi dengan benar.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun generateIdAndSaveEmployee(namaPegawai: String, noTelpon: String, gajiHarian: Int) {
-        // Extract initials from the employee's name for the ID
+    private fun generateIdAndSaveEmployee(namaPegawai: String, noTelpon: String, gajiHarian: Int, gajiMingguan: Int) {
         val initials = namaPegawai.split(" ").mapNotNull { it.firstOrNull()?.toUpperCase() }.joinToString("")
 
         db.collection("data_pegawai")
@@ -45,32 +44,27 @@ class Activity_Register_Pegawai : AppCompatActivity() {
             .addOnSuccessListener { documents ->
                 val recordCount = documents.size()
 
-                // Generate the employee ID, e.g., JT001
                 val idPegawai = initials + String.format("%03d", recordCount + 1)
-
-                // Set role as "pegawai" and password as the employee's name
                 val role = "pegawai"
                 val password = namaPegawai
 
-                // Create a map containing the new employee's data
                 val newPegawai = mapOf(
                     "idpegawai" to idPegawai,
                     "namaPegawai" to namaPegawai,
                     "noTelpon" to noTelpon,
                     "gajiHarian" to gajiHarian,
+                    "gajiMingguan" to gajiMingguan,
                     "role" to role,
                     "password" to password,
                     "status" to true,
                     "jumlah_absensi_mingguan" to 0
                 )
 
-                // Save the new employee to Firestore
                 db.collection("data_pegawai")
                     .add(newPegawai)
                     .addOnSuccessListener { documentReference ->
                         val firebaseId = documentReference.id
 
-                        // Setelah dokumen tersimpan, update field "id" dengan document ID dari Firestore
                         db.collection("data_pegawai").document(firebaseId)
                             .update("id", firebaseId)
                             .addOnSuccessListener {
@@ -94,5 +88,6 @@ class Activity_Register_Pegawai : AppCompatActivity() {
         binding.txtRegNamapegawai.text.clear()
         binding.txtRegNotelpon.text.clear()
         binding.txtRegGajiharian.text.clear()
+        binding.txtRegGajimingguan.text.clear()
     }
 }

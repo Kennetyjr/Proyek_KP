@@ -61,7 +61,7 @@ class Activity_Login : AppCompatActivity() {
                                     val gajiHarian = item.data["gajiHarian"].toString().toInt()
                                     cekAbsensi(idPegawai, gajiHarian)
                                 } else if (role == "admin") {
-                                    val nextIntent = Intent(this, Activity_HomeAdmin::class.java)
+                                    val nextIntent = Intent(this, Activity_HomeUtamaAdmin::class.java)
                                     startActivity(nextIntent)
                                     Toast.makeText(this, "Berhasil masuk sebagai Admin", Toast.LENGTH_SHORT).show()
                                 }
@@ -140,7 +140,7 @@ class Activity_Login : AppCompatActivity() {
                     if (jumlahAbsensiMingguan >= 7) {
                         // Reset jumlah_absensi_mingguan ke 1 jika sudah 7
                         db.collection("data_pegawai").document(pegawaiDocument.id)
-                            .update("jumlah_absensi_mingguan", 1)
+                            .update("jumlah_absensi_mingguan", 0)
                             .addOnSuccessListener {
                                 // Lanjutkan dengan menyimpan absensi
                                 cekAbsensiHariIni(idPegawai, gajiHarian, tanggalSekarang.toString())

@@ -145,10 +145,21 @@
         android:id="@+id/btnkeadminchane"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="576dp"
+        android:layout_marginTop="556dp"
         android:text="Admin Profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.811"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnlihatsemuapegawaiaktif"
+        android:layout_width="136dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="576dp"
+        android:text="Lihat Semua Pegawai Aktif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.138"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

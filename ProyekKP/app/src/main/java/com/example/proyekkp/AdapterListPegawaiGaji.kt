@@ -35,8 +35,8 @@ class AdapterListPegawaiGaji(
 
         txtidpegawai.text = pegawai.id_pegawai
         txtnamapegawai.text = pegawai.nama_pegawai
-        txtgajiharian.text = pegawai.gaji_harian.toString()
-        txtabsensiMingguan.text = "${pegawai.jumlah_absensi_mingguan}/7 hari"
+        txtgajiharian.text = "Gaji Harian: " + pegawai.gaji_harian.toString()
+        txtabsensiMingguan.text =  "Seminggu Masuk: ${pegawai.jumlah_absensi_mingguan}/7 hari"
 
         // Panggil fungsi untuk menghitung jumlah tanggal merah
         cekJumlahTanggalMerah(pegawai.id_pegawai) { jumlahTanggalMerah ->
@@ -57,10 +57,18 @@ class AdapterListPegawaiGaji(
             val inputLembur = if (txtinputlembur.text.toString().isEmpty()) 0 else txtinputlembur.text.toString().toInt()
             val fullMinggu = if (txtfullminggumasukgaji.text.toString().isEmpty()) 0 else txtfullminggumasukgaji.text.toString().toInt()
 
-            // Hitung total gaji
-            val totalGaji = hitungGajiTglMerah + hitungTotalGajiNormal + inputLembur + fullMinggu
+            // Inisialisasi total gaji
+            var totalGaji = hitungGajiTglMerah + hitungTotalGajiNormal + inputLembur + fullMinggu
+
+            // Tambahkan gaji mingguan jika absensi adalah 7/7 hari
+            if (txtabsensiMingguan.text.toString() == "7/7 hari") {
+                totalGaji += pegawai.gaji_mingguan // Tambahkan gaji mingguan dari data pegawai
+            }
+
+            // Tampilkan total gaji di TextView
             txttotal.text = totalGaji.toString()
         }
+
 
         return rowView
     }
